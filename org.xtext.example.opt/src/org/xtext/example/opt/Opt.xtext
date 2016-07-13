@@ -1,0 +1,135 @@
+grammar org.xtext.example.opt.Opt with org.eclipse.xtext.common.Terminals
+
+generate opt "http://www.xtext.org/example/opt/Opt"
+
+Model:
+	elements += Type*
+;
+
+Type:
+	Optimizer | Variable | Simulation | Function | EvolutionaryStrategies | Convergence | Duration | EndTime | MaxIteration | Threshold
+;
+
+Optimizer:
+	'optimizer' name = ID
+	'{'
+	'objective' objective = [Objective]';'
+	'stoppingcriteria' stoppingcriteria = [Stopping_Criteria] ';'
+	'optimizationmethod' optimizationmethod = [OptimizationMethod] ';'
+	'seed' seed = INT ';'
+	'minmax' minmax = MinMax ';'
+	'}'
+;
+
+OptimizationMethod:
+	EvolutionaryStrategies
+;
+
+EvolutionaryStrategies:
+	'evolutionarystrategies' name = ID
+	'{'
+	'mu' mu = INT ';'
+	'lambda' lambda = INT ';'
+	'sigma' sigma = DECIMAL ';'
+	'strategy' strategy = ESStrategy ';'
+	'}'
+;
+enum ESStrategy:
+	COMMA | PLUS
+;
+
+Variable:
+  'variable' name = ID ':' type = VariableType 'group' group = VariableGroup ('[' lowValue = DECIMAL ',' highValue = DECIMAL ']')? ';'
+;
+
+enum VariableGroup :
+	FACTOR | RESPONSE
+;
+enum VariableType :
+	BOOLEAN | INTEGER | DECIMAL | STRING
+;
+
+Objective:
+	Simulation | Function
+;
+
+enum MinMax:
+	Min | Max
+;
+
+Simulation:
+	'simulation' name = ID
+	'{'
+		'modelFolder' modelFileFolderPath = STRING ';'
+		'functionname' functionName = STRING ';'
+		'initialization' initialization = STRING ';'
+		'modelType' modelType = SimModelType ';'
+	'}'
+;
+
+Operator:
+	'+' | '-' | '*' | '/' | '%'
+;
+
+Atomic returns Expression:
+	{IntConstant} value=INT |
+	{DecimalConstant} value=DECIMAL |
+	{variableRef} variable=[Variable]
+;
+
+Function:
+	'function' name = ID
+	'{'
+	function1 = Expression ';'
+	'}'
+;
+
+Expression:
+	left=Atomic ((operator = Operator) (right = Expression))?
+;
+
+enum SimModelType:
+	STATIC | CONTINUOUS | DISCRETEEVENT
+;
+
+terminal DECIMAL : '-'? INT* '.' INT+;
+
+Stopping_Criteria:
+	Convergence | Duration | EndTime | MaxIteration | Threshold
+;
+
+Convergence:
+	'convergence' name = ID
+	'{'
+		('convergencethreshold' convergenceThreshold =  INT '.' INT ';')
+		('convergencerange' convergencerange = INT ';')
+	'}'
+;
+
+Duration:
+	'duration' name = ID
+	'{'
+		('durationtime' durationtime = STRING ';')
+	'}'
+;
+
+EndTime:
+	'endtime' name = ID
+	'{'
+		('endtime' endtime = STRING ';')
+	'}'
+;
+
+MaxIteration:
+	'maxiteration' name = ID
+	'{'
+		maxiteration = INT ';' 
+	'}'
+;
+
+Threshold:
+	'threshold' name = ID
+	'{'
+		('thresholdvalue' thresholdvalue = DECIMAL ';')
+	'}'
+;

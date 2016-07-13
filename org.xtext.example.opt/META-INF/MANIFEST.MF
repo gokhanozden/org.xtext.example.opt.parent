@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.xtext.example.opt
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.xtext.example.opt; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib,
+ org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.xtend.lib,
+ org.eclipse.emf.common
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.xtext.example.opt.parser.antlr.internal,
+ org.xtext.example.opt.parser.antlr,
+ org.xtext.example.opt.generator,
+ org.xtext.example.opt.opt.util,
+ org.xtext.example.opt.services,
+ org.xtext.example.opt.opt,
+ org.xtext.example.opt.opt.impl,
+ org.xtext.example.opt.serializer,
+ org.xtext.example.opt.validation,
+ org.xtext.example.opt.scoping,
+ org.xtext.example.opt
+Import-Package: org.apache.log4j
